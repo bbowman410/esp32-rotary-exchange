@@ -1,0 +1,17 @@
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# KiCad local state, locks, and autosave
+*.kicad_prl
+*.lck
+~*
+*-backups/
+fp-info-cache
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*-unsaved-export-*
