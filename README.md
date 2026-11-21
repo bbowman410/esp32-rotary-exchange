@@ -1,15 +1,8 @@
 # ESP32 Rotary Exchange
 
-A small private telephone exchange for vintage rotary phones. Each phone
-plugs into its own board: an ESP32, a Silvertel AG1170 subscriber-line
-circuit, and a PCM1808 analog-to-digital converter. The nodes find each
-other over Wi-Fi and place three-digit calls. A computer can join the same
-network as a softphone.
+A small private telephone exchange for vintage rotary phones that supports Wifi. Each phone on the network requires one module consisting of: an ESP32, a Silvertel AG1170 subscriber-line circuit, and a PCM1808 analog-to-digital converter. The nodes find each other over Wi-Fi and place three-digit calls. A computer can join the same network as a softphone for testing and troubleshooting.
 
-<p>
-  <img src="docs/images/module-with-phone.jpg" width="440" alt="Assembled exchange module connected to a vintage rotary phone">
-  <img src="docs/images/module.jpg" width="440" alt="Assembled board in its printed case, with the ESP32, AG1170, and PCM1808">
-</p>
+![Assembled exchange module connected to a vintage rotary phone](docs/images/module-with-phone.jpg)![Assembled board in its printed case, with the ESP32, AG1170, and PCM1808](docs/images/module.jpg)
 
 ```text
   rotary phone 456                         rotary phone 123
@@ -42,9 +35,6 @@ docs/protocol.md                  UDP packet format and call sequence
 docs/images/                      Photos of a finished module
 ```
 
-The KiCad project keeps the name `esp32-phone-exchange`. That name is
-stored throughout the schematic, the board, and the gerber filenames.
-
 ## Firmware
 
 The sketch needs an original ESP32 module (ESP-WROOM-32) and
@@ -53,10 +43,13 @@ and the call tones can play through the built-in DAC on GPIO25.
 ESP32-C3, S2, and S3 modules do not have that DAC.
 
 1. Install the Arduino IDE and, in Boards Manager, install **esp32 by
+
    Espressif Systems** at a 2.0.x release. Do not use 3.x.
 2. Open `firmware/esp32_rotary_exchange/esp32_rotary_exchange.ino`.
+
    The folder name and the sketch name have to match.
 3. Edit `config.h` in that same folder. Set the Wi-Fi name, the
+
    password, and a unique three-digit `NODE_NUMBER`.
 4. Under **Tools > Board**, choose **ESP32 Dev Module** and upload.
 
@@ -76,8 +69,7 @@ and `DISCOVERY_ADDR` in the softphone to the subnet broadcast, such as
 
 ## Softphone
 
-The computer is another phone. It does not answer by itself. The
-microphone and speaker are the handset.
+This is a python utulity for connecting to the network, listing phones, and making calls. This is handy when assembling your first board. You can test everything out before moving onto additional boards. 
 
 ```bash
 python3 -m pip install -r software/softphone/requirements.txt
@@ -145,17 +137,6 @@ Audio is uncompressed on purpose:
 - mono
 - 20 ms packets (160 samples)
 
-## First call
+## Performance
 
-Bring up one board and the softphone on the same Wi-Fi network before
-wiring a second telephone.
-
-1. From the softphone, `l` should show the ESP32. The board's own
-   discovery log is not visible, because the serial pin is already the
-   codec clock.
-2. `c 456` and let the real phone ring.
-3. Pick up and confirm audio in each direction. Use `t` if the
-   microphone is hard to hear.
-4. Hang up from each side.
-5. Dial the softphone's number, `111`, from the rotary phone and answer
-   with `a`.
+The setup works reasonably well, good enough to have a conversation. However the audio isn't perfect. It is noisy, and there can be some echoing. I assume some improvements can be made in software, however, I'm sure there are many hardware improvements that could be made as well. 
